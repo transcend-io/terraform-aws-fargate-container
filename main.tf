@@ -1,11 +1,8 @@
 locals {
   all_secrets = merge(
-        var.secret_environment,
-        var.secret_environment,
-      )
-}
-
-locals {
+    var.secret_environment,
+    var.secret_environment,
+  )
   has_secrets = length(local.all_secrets) > 0
 }
 
@@ -56,7 +53,7 @@ data "aws_iam_policy_document" "secret_access_policy_doc" {
 }
 
 resource "aws_iam_policy" "secret_access_policy" {
-  count = local.has_secrets ? 1 : 0
+  count       = local.has_secrets ? 1 : 0
   name_prefix = "${var.deploy_env}-${var.name}-secret-access-policy"
   description = "Gives access to read ssm env vars"
   policy      = data.aws_iam_policy_document.secret_access_policy_doc[0].json
