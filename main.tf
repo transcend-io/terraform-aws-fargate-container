@@ -89,6 +89,8 @@ module "definition" {
   container_cpu    = var.cpu
   container_memory = var.memory
 
+  healthcheck = var.healthcheck
+
   port_mappings = [
     for port in var.containerPorts :
     {
