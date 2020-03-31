@@ -9,8 +9,8 @@ output json_map {
 }
 
 output secrets_policy_arn {
-  value       = aws_iam_policy.secret_access_policy.*.arn
-  description = "Amazon Resource Name of an IAM Policy granting access to read the SSM Parameters created in this module"
+  value       = local.has_secrets ? aws_iam_policy.secret_access_policy[0].arn : ""
+  description = "Amazon Resource Name of an IAM Policy granting access to read the SSM Parameters created in this module. Empty if no secrets are present"
 }
 
 output container_name {
