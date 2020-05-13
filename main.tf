@@ -1,9 +1,20 @@
 locals {
-  all_secrets = merge(
-    var.secret_environment,
-    var.secret_environment,
+  ssm_arns = [
+    for name, outputs in merge(
+      aws_ssm_parameter.params,
+      aws_ssm_parameter.secret_log_options,
+    ) :
+    outputs.arn
+  ]
+
+  // Break the SSM param ARNs into var.secret_policy_chunks chunks to avoid 
+  // having any single policy over the 6144 character limit
+  ssm_chunks = chunklist(
+    local.ssm_arns,
+    ceil(length(local.ssm_arns) / var.secret_policy_chunks)
   )
-  has_secrets = length(local.all_secrets) > 0
+
+  has_secrets = length(local.ssm_arns) > 0
 }
 
 /**
@@ -55,28 +66,22 @@ resource "aws_ssm_parameter" "secret_log_options" {
 }
 
 data "aws_iam_policy_document" "secret_access_policy_doc" {
-  count = local.has_secrets ? 1 : 0
+  count = local.has_secrets ? var.secret_policy_chunks : 0
   statement {
     effect = "Allow"
     actions = [
       "ssm:GetParameters",
       "secretsmanager:GetSecretValue",
     ]
-    resources = [
-      for name, outputs in merge(
-        aws_ssm_parameter.params,
-        aws_ssm_parameter.secret_log_options,
-      ) :
-      outputs.arn
-    ]
+    resources = local.ssm_chunks[count.index]
   }
 }
 
 resource "aws_iam_policy" "secret_access_policy" {
-  count       = local.has_secrets ? 1 : 0
+  count = local.has_secrets ? var.secret_policy_chunks : 0
   name_prefix = "${var.deploy_env}-${var.name}-secret-access-policy"
   description = "Gives access to read ssm env vars"
-  policy      = data.aws_iam_policy_document.secret_access_policy_doc[0].json
+  policy      = data.aws_iam_policy_document.secret_access_policy_doc[count.index].json
 }
 
 module "definition" {
