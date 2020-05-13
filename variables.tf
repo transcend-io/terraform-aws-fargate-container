@@ -77,6 +77,20 @@ variable secret_environment {
   EOF
 }
 
+variable secret_policy_chunks {
+  type = number
+  default = 1
+  description = <<EOF
+  By default, a single IAM policy is created for accessing SSM params.
+
+  In the case that you have many, many params, you may hit the Managed Policy
+  Character Limit of 6144 characters (whitespace not included): https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-limits.html
+
+  In this case, increasing this value will make additional policies that split the environment map into var.secret_policy_chunks IAM
+  Policies, all still attached to the ECS Task Role.
+  EOF
+}
+
 variable tags {
   type        = map(string)
   description = "Tags to apply to all resources that support them"
