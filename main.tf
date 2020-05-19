@@ -14,7 +14,7 @@ locals {
     ceil(length(local.ssm_arns) / var.secret_policy_chunks)
   )
 
-  has_secrets = length(local.ssm_arns) > 0
+  has_secrets = length(var.secret_environment) + length(var.log_secrets) > 0
 }
 
 /**
