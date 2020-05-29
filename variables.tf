@@ -78,8 +78,8 @@ variable secret_environment {
 }
 
 variable secret_policy_chunks {
-  type = number
-  default = 1
+  type        = number
+  default     = 1
   description = <<EOF
   By default, a single IAM policy is created for accessing SSM params.
 
@@ -144,7 +144,7 @@ variable log_secrets {
 }
 
 # https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_HealthCheck.html
-variable "healthcheck" {
+variable healthcheck {
   type = object({
     command     = list(string)
     retries     = number
@@ -154,4 +154,10 @@ variable "healthcheck" {
   })
   description = "A map containing command (string), timeout, interval (duration in seconds), retries (1-10, number of times to retry before marking container unhealthy), and startPeriod (0-300, optional grace period to wait, in seconds, before failed healthchecks count toward retries)"
   default     = null
+}
+
+variable essential {
+  type        = bool
+  default     = true
+  description = "Determines whether all other containers in a task are stopped, if this container fails or stops for any reason."
 }
