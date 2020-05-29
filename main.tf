@@ -29,7 +29,7 @@ resource null_resource dummy {
   # Changes to any instance of the cluster requires re-provisioning
   triggers = {
     container_definition = module.definition.json
-    what_is_this   = <<EOF
+    what_is_this         = <<EOF
     You may be wondering why you're seeing some resource named `null_resource.dummy` with a plan
     after updating this module. Well no fear, this is just done to let you know that you need
     to run an `atlantis apply` on the CI system to change the output of this module.
@@ -78,7 +78,7 @@ data "aws_iam_policy_document" "secret_access_policy_doc" {
 }
 
 resource "aws_iam_policy" "secret_access_policy" {
-  count = local.has_secrets ? var.secret_policy_chunks : 0
+  count       = local.has_secrets ? var.secret_policy_chunks : 0
   name_prefix = "${var.deploy_env}-${var.name}-secret-access-policy"
   description = "Gives access to read ssm env vars"
   policy      = data.aws_iam_policy_document.secret_access_policy_doc[count.index].json
@@ -95,6 +95,7 @@ module "definition" {
   container_memory = var.memory
 
   healthcheck = var.healthcheck
+  essential   = var.essential
 
   port_mappings = [
     for port in var.containerPorts :
