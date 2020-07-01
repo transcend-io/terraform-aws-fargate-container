@@ -17,26 +17,6 @@ locals {
   has_secrets = length(var.secret_environment) + length(var.log_secrets) > 0
 }
 
-/**
- * We want to have a plan appear anytime the definition will be updated on a
- * run of `terraform plan`.
- *
- * As the primary purpose of this module is to create json output and not create a resource,
- * the bulk of the work does not show up in plans. So we use a dummy resource here to make changes
- * to the json document appear in the plan.
- */
-resource null_resource dummy {
-  # Changes to any instance of the cluster requires re-provisioning
-  triggers = {
-    container_definition = module.definition.json
-    what_is_this         = <<EOF
-    You may be wondering why you're seeing some resource named `null_resource.dummy` with a plan
-    after updating this module. Well no fear, this is just done to let you know that you need
-    to run an `atlantis apply` on the CI system to change the output of this module.
-    EOF
-  }
-}
-
 resource "aws_ssm_parameter" "params" {
   for_each = var.secret_environment
 
