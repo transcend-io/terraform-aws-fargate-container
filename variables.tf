@@ -37,6 +37,15 @@ variable memory {
   EOF
 }
 
+variable memoryReservation {
+  type        = number
+  default     = 512
+  description = <<EOF
+  The amount of memory (in MiB) to reserve for the container. If container needs to exceed this threshold,
+  it can do so up to the set container_memory hard limit"
+  EOF
+}
+
 variable containerPorts {
   type        = list(number)
   default     = []
