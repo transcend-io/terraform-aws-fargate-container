@@ -71,8 +71,9 @@ module "definition" {
   container_name  = var.name
   container_image = var.image
 
-  container_cpu    = var.cpu
-  container_memory = var.memory
+  container_cpu                = var.cpu
+  container_memory             = var.memory
+  container_memory_reservation = var.memoryReservation
 
   healthcheck = var.healthcheck
   essential   = var.essential
