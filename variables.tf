@@ -86,6 +86,15 @@ variable secret_environment {
   EOF
 }
 
+variable existing_secret_environment {
+  type = list(object({
+    name      = string
+    valueFrom = string
+  }))
+  description = "A way for you to use existing SSM params as env vars"
+  default     = []
+}
+
 variable secret_policy_chunks {
   type        = number
   default     = 1
