@@ -152,6 +152,15 @@ variable log_secrets {
   description = "Used to add extra options to log_configuration.options that should be secret, such as third party API keys"
 }
 
+variable extra_log_secret_options {
+  type = list(object({
+    name      = string
+    valueFrom = string
+  }))
+  description = "A way for you to use existing SSM params in logs"
+  default     = []
+}
+
 # https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_HealthCheck.html
 variable healthcheck {
   type = object({

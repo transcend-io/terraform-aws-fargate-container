@@ -96,13 +96,13 @@ module "definition" {
     }
     secretOptions = []
     } : merge(var.log_configuration, {
-      secretOptions = [
+      secretOptions = concat(var.extra_log_secret_options, [
         for name, outputs in aws_ssm_parameter.secret_log_options :
         {
           name      = name
           valueFrom = outputs.arn
         }
-      ]
+      ])
   })
 
   environment = [
