@@ -113,13 +113,13 @@ module "definition" {
     }
   ]
 
-  secrets = [
+  secrets = concat(var.existing_secret_environment, [
     for name, outputs in aws_ssm_parameter.params :
     {
       name      = name
       valueFrom = outputs.arn
     }
-  ]
+  ])
 }
 
 resource "aws_cloudwatch_log_group" "log_group" {
