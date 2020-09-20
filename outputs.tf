@@ -1,10 +1,10 @@
 output json {
-  value       = module.definition.json
+  value       = module.definition.json_map_encoded_list
   description = "JSON string representing the container definition"
 }
 
 output json_map {
-  value       = module.definition.json_map
+  value       = module.definition.json_map_encoded
   description = "Object representing the container definition"
 }
 

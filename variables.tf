@@ -188,3 +188,21 @@ variable essential {
   default     = true
   description = "Determines whether all other containers in a task are stopped, if this container fails or stops for any reason."
 }
+
+variable "container_depends_on" {
+  type = list(object({
+    containerName = string
+    condition     = string
+  }))
+  description = "The dependencies defined for container startup and shutdown. A container can contain multiple dependencies. When a dependency is defined for container startup, for container shutdown it is reversed. The condition can be one of START, COMPLETE, SUCCESS or HEALTHY"
+  default     = null
+}
+
+variable "volumes_from" {
+  type = list(object({
+    sourceContainer = string
+    readOnly        = bool
+  }))
+  description = "A list of VolumesFrom maps which contain \"sourceContainer\" (name of the container that has the volumes to mount) and \"readOnly\" (whether the container can write to the volume)"
+  default     = []
+}
