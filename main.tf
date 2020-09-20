@@ -75,10 +75,11 @@ module "definition" {
   container_memory             = var.memory
   container_memory_reservation = var.memoryReservation
 
-  healthcheck = var.healthcheck
-  essential   = var.essential
+  healthcheck          = var.healthcheck
+  essential            = var.essential
   container_depends_on = var.container_depends_on
-  volumes_from = var.volumes_from
+  volumes_from         = var.volumes_from
+  entrypoint           = var.entrypoint
 
   port_mappings = [
     for port in var.containerPorts :
