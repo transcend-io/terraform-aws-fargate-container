@@ -80,6 +80,7 @@ module "definition" {
   container_depends_on = var.container_depends_on
   volumes_from         = var.volumes_from
   entrypoint           = var.entrypoint
+  mount_points         = var.mount_points
 
   port_mappings = [
     for port in var.containerPorts :

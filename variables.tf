@@ -207,6 +207,12 @@ variable "volumes_from" {
   default     = []
 }
 
+variable "mount_points" {
+  type        = list(map(string))
+  description = "Container mount points"
+  default     = []
+}
+
 variable "entrypoint" {
   type        = list(string)
   description = "The entry point that is passed to the container"
