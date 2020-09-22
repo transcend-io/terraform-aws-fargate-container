@@ -218,3 +218,9 @@ variable "entrypoint" {
   description = "The entry point that is passed to the container"
   default     = null
 }
+
+variable "command" {
+  type        = list(string)
+  description = "The command that is passed to the container"
+  default     = null
+}
