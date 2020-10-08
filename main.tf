@@ -66,7 +66,7 @@ resource "aws_iam_policy" "secret_access_policy" {
 
 module "definition" {
   source  = "cloudposse/ecs-container-definition/aws"
-  version = "v0.21.0"
+  version = "v0.41.0"
 
   container_name  = var.name
   container_image = var.image
@@ -75,8 +75,13 @@ module "definition" {
   container_memory             = var.memory
   container_memory_reservation = var.memoryReservation
 
-  healthcheck = var.healthcheck
-  essential   = var.essential
+  healthcheck          = var.healthcheck
+  essential            = var.essential
+  container_depends_on = var.container_depends_on
+  volumes_from         = var.volumes_from
+  entrypoint           = var.entrypoint
+  mount_points         = var.mount_points
+  command              = var.command
 
   port_mappings = [
     for port in var.containerPorts :
