@@ -125,6 +125,8 @@ module "definition" {
       valueFrom = outputs.arn
     }
   ])
+
+  linux_parameters = var.linux_parameters
 }
 
 resource "aws_cloudwatch_log_group" "log_group" {
