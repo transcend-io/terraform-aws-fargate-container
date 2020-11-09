@@ -238,8 +238,5 @@ variable "linux_parameters" {
     initProcessEnabled = bool
   })
   description = "Linux-specific modifications that are applied to the container, such as Linux kernel capabilities."
-  default = {
-    capabilities       = {}
-    initProcessEnabled = false
-  }
+  default     = {}
 }
