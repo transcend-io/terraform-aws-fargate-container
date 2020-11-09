@@ -235,21 +235,8 @@ variable "linux_parameters" {
       add  = list(string)
       drop = list(string)
     })
-    devices = list(object({
-      containerPath = string
-      hostPath      = string
-      permissions   = list(string)
-    }))
     initProcessEnabled = bool
-    maxSwap            = number
-    sharedMemorySize   = number
-    swappiness         = number
-    tmpfs = list(object({
-      containerPath = string
-      mountOptions  = list(string)
-      size          = number
-    }))
   })
   description = "Linux-specific modifications that are applied to the container, such as Linux kernel capabilities."
-  default     = null
+  default     = {}
 }
