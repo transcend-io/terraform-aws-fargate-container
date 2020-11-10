@@ -126,7 +126,13 @@ module "definition" {
     }
   ])
 
-  linux_parameters = var.linux_parameters
+  linux_parameters = merge(var.linux_parameters, {
+    devices = []
+    maxSwap = 0
+    sharedMemorySize = 64
+    swappiness = 60
+    tmpfs = []
+  })
 }
 
 resource "aws_cloudwatch_log_group" "log_group" {
