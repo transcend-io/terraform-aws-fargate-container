@@ -66,7 +66,7 @@ resource "aws_iam_policy" "secret_access_policy" {
 
 module "definition" {
   source  = "cloudposse/ecs-container-definition/aws"
-  version = "v0.41.0"
+  version = "v0.45.2"
 
   container_name  = var.name
   container_image = var.image
