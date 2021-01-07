@@ -127,6 +127,7 @@ module "definition" {
   ])
 
   linux_parameters = var.linux_parameters
+  docker_security_options = var.docker_security_options
 }
 
 resource "aws_cloudwatch_log_group" "log_group" {
