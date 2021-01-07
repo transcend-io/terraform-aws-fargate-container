@@ -253,3 +253,9 @@ variable "linux_parameters" {
   description = "Linux-specific modifications that are applied to the container, such as Linux kernel capabilities. For more details, see https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_LinuxParameters.html"
   default     = null
 }
+
+variable "docker_security_options" {
+  type        = list(string)
+  description = "A list of strings to provide custom labels for SELinux and AppArmor multi-level security systems."
+  default     = null
+}
