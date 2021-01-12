@@ -259,3 +259,9 @@ variable "docker_security_options" {
   description = "A list of strings to provide custom labels for SELinux and AppArmor multi-level security systems."
   default     = null
 }
+
+variable "working_directory" {
+  type        = string
+  description = "The working directory to run commands inside the container"
+  default     = null
+}
