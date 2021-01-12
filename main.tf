@@ -81,6 +81,7 @@ module "definition" {
   volumes_from         = var.volumes_from
   entrypoint           = var.entrypoint
   mount_points         = var.mount_points
+  working_directory    = var.working_directory
   command              = var.command
 
   port_mappings = [
