@@ -73,6 +73,8 @@ variable secret_environment {
   type        = map(string)
   default     = {}
   description = <<EOF
+  DEPRECATED: Use a combination of `plain_secrets`, and `vault_secrets`.
+
   The secret environment variables to pass to a container.
 
   Usage would be something like:
@@ -264,4 +266,28 @@ variable "working_directory" {
   type        = string
   description = "The working directory to run commands inside the container"
   default     = null
+}
+
+variable "vault_secrets" {
+  type = list(object({
+    env_name       = string,
+    path           = string,
+    secret_key     = string,
+    secret_version = number
+  }))
+  description = "List of secrets to fetch from Vault"
+  default     = []
+}
+
+variable "plain_secrets" {
+  type        = map(string)
+  description = <<EOF
+  Map of secrets to upload to AWS Systems Manager's Parameter Store (SSM).
+  Expects a map of the format:
+{
+  COOL_SECRET: "abc1232",
+  RIDICULOUSLY_COOL_SECRET: "1337haxxor"
+}
+  EOF
+  default     = {}
 }
