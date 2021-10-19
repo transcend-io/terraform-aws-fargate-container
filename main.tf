@@ -15,7 +15,7 @@ locals {
   )
 
   // Combine existing secret_environment variables, with plain_secrets, and fetched secrets from Vault.
-  combined_secret_environemnt = merge(var.secret_environment, {
+  combined_secret_environment = merge(var.secret_environment, {
     for secret_meta in var.vault_secrets :
     secret_meta.env_name => data.vault_generic_secret.vault_secret[secret_meta.env_name].data[secret_meta.secret_key]
   })
@@ -24,7 +24,7 @@ locals {
 }
 
 resource "aws_ssm_parameter" "params" {
-  for_each = locaks.combined_secret_environemnt
+  for_each = locals.combined_secret_environment
 
   description = "Param for the ${each.key} env var in the container: ${var.name}"
 
