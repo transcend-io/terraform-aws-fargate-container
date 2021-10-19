@@ -15,12 +15,12 @@ locals {
   )
 
   // Combine existing secret_environment variables, with plain_secrets, and fetched secrets from Vault.
-  combined_secret_environemnt = merge(var.secret_environment, var.plain_secrets, {
+  combined_secret_environemnt = merge(var.secret_environment, {
     for secret_meta in var.vault_secrets :
     secret_meta.env_name => data.vault_generic_secret.vault_secret[secret_meta.env_name].data[secret_meta.secret_key]
   })
 
-  has_secrets = length(locals.combined_secret_environemnt) + length(var.log_secrets) > 0
+  has_secrets = length(var.secret_environment) + length(var.vault_secrets) + length(var.log_secrets) > 0
 }
 
 resource "aws_ssm_parameter" "params" {

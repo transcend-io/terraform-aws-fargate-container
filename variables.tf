@@ -278,16 +278,3 @@ variable "vault_secrets" {
   description = "List of secrets to fetch from Vault"
   default     = []
 }
-
-variable "plain_secrets" {
-  type        = map(string)
-  description = <<EOF
-  Map of secrets to upload to AWS Systems Manager's Parameter Store (SSM).
-  Expects a map of the format:
-{
-  COOL_SECRET: "abc1232",
-  RIDICULOUSLY_COOL_SECRET: "1337haxxor"
-}
-  EOF
-  default     = {}
-}
