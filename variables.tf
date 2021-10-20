@@ -279,7 +279,7 @@ variable "vault_secrets" {
 
 variable "vault_log_secrets" {
   type        = list(object({
-    env_name       = string,
+    name           = string,
     path           = string,
     secret_key     = string,
     secret_version = number

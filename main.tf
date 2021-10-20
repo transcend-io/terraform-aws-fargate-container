@@ -23,7 +23,7 @@ locals {
   // Combine existing log_secrets variables, with fetched secrets from Vault.
   combined_log_secrets = merge(var.log_secrets, {
     for secret_meta in var.vault_log_secrets :
-    secret_meta.env_name => data.vault_generic_secret.vault_log_secret[secret_meta.env_name].data[secret_meta.secret_key]
+    secret_meta.name => data.vault_generic_secret.vault_log_secret[secret_meta.name].data[secret_meta.secret_key]
   })
 
   has_secrets = length(var.secret_environment) + length(var.vault_secrets) + length(var.log_secrets) > 0
@@ -76,7 +76,7 @@ data "vault_generic_secret" "vault_secret" {
 }
 
 data "vault_generic_secret" "vault_log_secret" {
-  for_each = { for secret_meta in var.vault_log_secrets : secret_meta.env_name => secret_meta }
+  for_each = { for secret_meta in var.vault_log_secrets : secret_meta.name => secret_meta }
   path     = each.value.path
   version  = each.value.secret_version >= 0 ? each.value.secret_version : null
 }
