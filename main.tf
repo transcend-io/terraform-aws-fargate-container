@@ -26,7 +26,7 @@ locals {
     secret_meta.name => data.vault_generic_secret.vault_log_secret[secret_meta.name].data[secret_meta.secret_key]
   })
 
-  has_secrets = length(var.secret_environment) + length(var.vault_secrets) + length(var.log_secrets) > 0
+  has_secrets = length(var.secret_environment) + length(var.vault_secrets) + length(var.vault_log_secrets) + length(var.log_secrets) > 0
 }
 
 resource "aws_ssm_parameter" "params" {
