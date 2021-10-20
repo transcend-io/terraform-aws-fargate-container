@@ -14,11 +14,17 @@ locals {
     ceil(length(local.ssm_arns) / var.secret_policy_chunks)
   )
 
-  has_secrets = length(var.secret_environment) + length(var.log_secrets) > 0
+  // Combine existing secret_environment variables, with plain_secrets, and fetched secrets from Vault.
+  combined_secret_environment = merge(var.secret_environment, {
+    for secret_meta in var.vault_secrets :
+    secret_meta.env_name => data.vault_generic_secret.vault_secret[secret_meta.env_name].data[secret_meta.secret_key]
+  })
+
+  has_secrets = length(var.secret_environment) + length(var.vault_secrets) + length(var.log_secrets) > 0
 }
 
 resource "aws_ssm_parameter" "params" {
-  for_each = var.secret_environment
+  for_each = locals.combined_secret_environment
 
   description = "Param for the ${each.key} env var in the container: ${var.name}"
 
@@ -55,6 +61,12 @@ data "aws_iam_policy_document" "secret_access_policy_doc" {
     ]
     resources = local.ssm_chunks[count.index]
   }
+}
+
+data "vault_generic_secret" "vault_secret" {
+  for_each = { for secret_meta in var.vault_secrets : secret_meta.env_name => secret_meta }
+  path     = each.value.path
+  version  = each.value.secret_version >= 0 ? each.value.secret_version : null
 }
 
 resource "aws_iam_policy" "secret_access_policy" {

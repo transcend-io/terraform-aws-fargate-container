@@ -265,3 +265,14 @@ variable "working_directory" {
   description = "The working directory to run commands inside the container"
   default     = null
 }
+
+variable "vault_secrets" {
+  type = list(object({
+    env_name       = string,
+    path           = string,
+    secret_key     = string,
+    secret_version = number
+  }))
+  description = "List of secrets to fetch from Vault"
+  default     = []
+}
