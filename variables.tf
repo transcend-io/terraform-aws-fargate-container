@@ -276,3 +276,16 @@ variable "vault_secrets" {
   description = "List of secrets to fetch from Vault"
   default     = []
 }
+
+variable "vault_log_secrets" {
+  type        = list(object({
+    env_name       = string,
+    path           = string,
+    secret_key     = string,
+    secret_version = number
+  }))
+  default     = []
+  description = <<EOF
+Used to add extra options to log_configuration.options that should be secret, such as third party API keys, fetched from Vault.
+EOF
+}
