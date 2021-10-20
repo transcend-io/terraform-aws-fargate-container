@@ -24,7 +24,7 @@ locals {
 }
 
 resource "aws_ssm_parameter" "params" {
-  for_each = locals.combined_secret_environment
+  for_each = local.combined_secret_environment
 
   description = "Param for the ${each.key} env var in the container: ${var.name}"
 
