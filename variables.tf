@@ -73,8 +73,6 @@ variable secret_environment {
   type        = map(string)
   default     = {}
   description = <<EOF
-  DEPRECATED: Use a combination of `plain_secrets`, and `vault_secrets`.
-
   The secret environment variables to pass to a container.
 
   Usage would be something like:
