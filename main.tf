@@ -44,7 +44,7 @@ resource "aws_ssm_parameter" "params" {
 }
 
 resource "aws_ssm_parameter" "secret_log_options" {
-  for_each = var.log_secrets
+  for_each = local.combined_log_secrets
 
   description = "Log option named ${each.key} in the container: ${var.name}"
 
