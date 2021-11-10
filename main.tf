@@ -80,7 +80,7 @@ data "vault_generic_secret" "vault_secret" {
   for_each = { for secret_meta in var.vault_secrets : secret_meta.env_name => secret_meta }
   # Force the data source to be looked up during the apply step, not the plan step.
   # See: https://github.com/hashicorp/terraform-provider-vault/issues/1221
-  path     = trimprefix(local.always_changing_value + each.value.path, local.always_changing_value)
+  path     = trimprefix("${local.always_changing_value}${each.value.path}", local.always_changing_value)
   version  = each.value.secret_version >= 0 ? each.value.secret_version : null
 }
 
@@ -88,7 +88,7 @@ data "vault_generic_secret" "vault_log_secret" {
   for_each = { for secret_meta in var.vault_log_secrets : secret_meta.name => secret_meta }
   # Force the data source to be looked up during the apply step, not the plan step.
   # See: https://github.com/hashicorp/terraform-provider-vault/issues/1221
-  path     = trimprefix(local.always_changing_value + each.value.path, local.always_changing_value)
+  path     = trimprefix("${local.always_changing_value}${each.value.path}", local.always_changing_value)
   version  = each.value.secret_version >= 0 ? each.value.secret_version : null
 }
 
