@@ -114,6 +114,7 @@ module "definition" {
       containerPort = port
       hostPort      = port
       protocol      = "tcp"
+      name          = lookup(var.portNames, port, null)
     }
   ]
 

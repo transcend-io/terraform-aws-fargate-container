@@ -55,6 +55,12 @@ variable containerPorts {
   EOF
 }
 
+variable portNames {
+  type        = map(string)
+  default     = {}
+  description = "A map of port numbers to their respective names for service discovery"
+}
+
 variable environment {
   type        = map(string)
   default     = {}
