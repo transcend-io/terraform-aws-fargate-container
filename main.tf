@@ -155,25 +155,22 @@ module "definition" {
   linux_parameters        = var.linux_parameters
   docker_security_options = var.docker_security_options
 
-  # Disable ECS software version consistency. By default ECS resolves a
-  # floating image tag to a digest at deployment time and pins every task
-  # in the deployment to that digest, even when the underlying tag is
-  # later moved to a new image. That pin is held until the next forced
-  # deployment, so if the original digest is ever deleted from ECR (for
-  # example by an "untagged image" lifecycle rule), task replacements,
-  # AZ rebalances, and scale-out attempts within the active deployment
-  # all fail with `CannotPullContainerError: ... not found`. Setting
-  # `versionConsistency = "disabled"` makes ECS re-resolve the floating
-  # tag on every task launch, so a re-tagged image is picked up as soon
-  # as a task is replaced for any reason. See
-  # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/version-consistency.html
-  # for the AWS-side semantics. cloudposse/ecs-container-definition v0.45.2
-  # exposes the `var.container_definition` map as an override that is
-  # merged on top of the rendered definition; this is the smallest
-  # possible change to push the field through without bumping the
-  # upstream cloudposse module.
-  container_definition = {
-    versionConsistency = "disabled"
+  # Optionally pass `versionConsistency` through to the rendered container
+  # definition. When `var.version_consistency` is null (the default), no
+  # field is rendered and AWS's default behavior applies (ECS pins the
+  # resolved image digest for every task in the deployment — see
+  # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/version-consistency.html).
+  # Callers that want fresh tag resolution on every task launch can set
+  # `version_consistency = "disabled"` to avoid the failure mode where
+  # ECS holds a deployment open against an image digest that ECR's
+  # lifecycle policy has since deleted.
+  #
+  # cloudposse/ecs-container-definition v0.45.2 exposes
+  # `var.container_definition` as an override map merged on top of the
+  # rendered definition (`json_map = jsonencode(merge(...))`), so this
+  # passthrough does not require a cloudposse upgrade.
+  container_definition = var.version_consistency == null ? {} : {
+    versionConsistency = var.version_consistency
   }
 }
 
