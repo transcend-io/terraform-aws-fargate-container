@@ -295,3 +295,25 @@ variable "vault_log_secrets" {
 Used to add extra options to log_configuration.options that should be secret, such as third party API keys, fetched from Vault.
 EOF
 }
+
+variable "version_consistency" {
+  type        = string
+  default     = null
+  description = <<EOF
+Optional value for the ECS container definition's `versionConsistency` field.
+When null (the default), the field is not rendered and AWS's default behavior
+applies (ECS pins the resolved image digest for every task in the active
+deployment). Set to "disabled" to make ECS re-resolve a floating image tag on
+every task launch -- useful for callers that move floating tags (e.g. ":prod")
+on each deploy and have ECR lifecycle rules that may garbage-collect the
+originally-pinned digest. See:
+https://docs.aws.amazon.com/AmazonECS/latest/developerguide/version-consistency.html
+
+Valid values: null, "enabled", "disabled".
+EOF
+
+  validation {
+    condition     = var.version_consistency == null || contains(["enabled", "disabled"], var.version_consistency)
+    error_message = "version_consistency must be null, \"enabled\", or \"disabled\"."
+  }
+}

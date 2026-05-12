@@ -152,8 +152,26 @@ module "definition" {
     }
   ])
 
-  linux_parameters = var.linux_parameters
+  linux_parameters        = var.linux_parameters
   docker_security_options = var.docker_security_options
+
+  # Optionally pass `versionConsistency` through to the rendered container
+  # definition. When `var.version_consistency` is null (the default), no
+  # field is rendered and AWS's default behavior applies (ECS pins the
+  # resolved image digest for every task in the deployment — see
+  # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/version-consistency.html).
+  # Callers that want fresh tag resolution on every task launch can set
+  # `version_consistency = "disabled"` to avoid the failure mode where
+  # ECS holds a deployment open against an image digest that ECR's
+  # lifecycle policy has since deleted.
+  #
+  # cloudposse/ecs-container-definition v0.45.2 exposes
+  # `var.container_definition` as an override map merged on top of the
+  # rendered definition (`json_map = jsonencode(merge(...))`), so this
+  # passthrough does not require a cloudposse upgrade.
+  container_definition = var.version_consistency == null ? {} : {
+    versionConsistency = var.version_consistency
+  }
 }
 
 resource "aws_cloudwatch_log_group" "log_group" {
